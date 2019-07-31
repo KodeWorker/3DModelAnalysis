@@ -1,0 +1,13 @@
+*.pyc
+*.dxf
+*.DXF
+*.gbr
+*.GBR
+*.step
+*.stp
+*.xlsx
+doc/
+models/
+build/
+dist/
+data/
