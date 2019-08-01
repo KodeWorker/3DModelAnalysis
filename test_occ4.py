@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# z-direction cross section
 from OCC.STEPControl import STEPControl_Reader
 from OCC.TopAbs import TopAbs_FACE
 from OCC.TopExp import TopExp_Explorer
@@ -22,12 +23,16 @@ from OCC.TopoDS import topods
 from core_topology_traverse import Topo
 from core_geometry_bounding_box import get_boundingbox
 
+# RGBA colors for the visualisation of elements
+RED, WHITE = (1.0, 0, 0, 1.0), (1.0, 1.0, 1.0, 1.0)
+
 # Specify to return pythonOCC shapes from ifcopenshell.geom.create_shape()
 settings = ifcopenshell.geom.settings()
 settings.set(settings.USE_PYTHON_OPENCASCADE, True)
 
 # Initialize a graphical display window
 occ_display = ifcopenshell.geom.utils.initialize_display()
+#occ_display.View.SetBackgroundColor(WHITE)
 
 # Read the file and get the shape
 reader = STEPControl_Reader()
@@ -64,7 +69,7 @@ while exp.More():
     tp = Topo(s)
     for face in tp.faces():
         
-        ifcopenshell.geom.utils.display_shape(face)        
+#        ifcopenshell.geom.utils.display_shape(face)        
         section = OCC.BRepAlgoAPI.BRepAlgoAPI_Section(section_face, face).Shape()
         section_edges = list(Topo(section).edges())
         
@@ -91,8 +96,8 @@ while exp.More():
                 wire = topods.Wire(wire_shape)
                 face = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeFace(wire).Face()                
                 # The wires and the faces are displayed
-                ifcopenshell.geom.utils.display_shape(wire)
-                face_display = ifcopenshell.geom.utils.display_shape(face)
+                ifcopenshell.geom.utils.display_shape(wire, clr=RED)
+                face_display = ifcopenshell.geom.utils.display_shape(face, clr=RED)
                 ifcopenshell.geom.utils.set_shape_transparency(face_display, 0.5)
                     
     exp.Next()

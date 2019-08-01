@@ -4,6 +4,7 @@
 
 ## Dev Log
 - 2019/07/31 project initiation
+- 2019/08/01 experiment on cross section and edge projection
 
 ## Reference
 

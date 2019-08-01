@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# x-direction cross section
 from OCC.STEPControl import STEPControl_Reader
 from OCC.TopAbs import TopAbs_FACE
 from OCC.TopExp import TopExp_Explorer
@@ -17,10 +18,14 @@ import ifcopenshell.geom
 from OCC.TopoDS import topods
 #from OCC.BRepTools import BRepTools_WireExplorer
 
+
 #import matplotlib.pyplot as plt
 
 from core_topology_traverse import Topo
 from core_geometry_bounding_box import get_boundingbox
+
+# RGBA colors for the visualisation of elements
+RED, WHITE = (1.0, 0, 0, 1.0), (1.0, 1.0, 1.0, 1.0)
 
 # Specify to return pythonOCC shapes from ifcopenshell.geom.create_shape()
 settings = ifcopenshell.geom.settings()
@@ -91,8 +96,8 @@ while exp.More():
                 wire = topods.Wire(wire_shape)
                 face = OCC.BRepBuilderAPI.BRepBuilderAPI_MakeFace(wire).Face()                
                 # The wires and the faces are displayed
-                ifcopenshell.geom.utils.display_shape(wire)
-                face_display = ifcopenshell.geom.utils.display_shape(face)
+                ifcopenshell.geom.utils.display_shape(wire, clr=RED)
+                face_display = ifcopenshell.geom.utils.display_shape(face, clr=RED)
                 ifcopenshell.geom.utils.set_shape_transparency(face_display, 0.5)
                     
     exp.Next()
