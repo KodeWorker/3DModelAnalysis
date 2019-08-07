@@ -70,6 +70,5 @@ while exp.More():
         
         for edge in section_edges: 
             ifcopenshell.geom.utils.display_shape(edge, clr=RED)
-
                 
     exp.Next()

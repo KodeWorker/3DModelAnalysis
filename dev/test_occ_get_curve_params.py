@@ -35,7 +35,7 @@ def angle360(vector1, vector2=(1, 0)):
 #    angle = atan2(det, dot)  # atan2(y, x) or atan2(sin, cos)
     
     import numpy as np
-    angle = np.degrees(np.arctan2(vector1[1], vector1[0]))
+    angle = np.degrees(np.arctan2(vector1[1], vector1[0])) % 360
     return angle
 
 
@@ -61,6 +61,7 @@ xmin, ymin, zmin, xmax, ymax, zmax, x_range, y_range, z_range = get_boundingbox(
 
 #section_height = zmin+1e-3
 section_height = zmax-1e-3
+#section_height = zmax
 
 plt.figure()
 plt.xlim((xmin, xmax))
@@ -100,7 +101,6 @@ while exp.More():
                 plt.plot([x1, x2], [y1, y2], color="red")
                 
             elif handle_adaptor.GetType() == GeomAbs_Circle:
-#                print("CIRCLE")
                 v = list(Topo(edge).vertices())
                 start = (BRep_Tool.Pnt(v[0]).X(), BRep_Tool.Pnt(v[0]).Y())
                 end = (BRep_Tool.Pnt(v[-1]).X(), BRep_Tool.Pnt(v[-1]).Y())
@@ -112,17 +112,13 @@ while exp.More():
                 vec_start = (start[0] - center[0], start[1] - center[1])
                 vec_end = (end[0] - center[0], end[1] - center[1])
                 
-                t_start = angle360(vec_start)
-                t_end = angle360(vec_end)
+                t_1 = angle360(vec_end)
+                t_2 = angle360(vec_start)                
                 
-                t_start, t_end = t_end, t_start
-#                t_start, t_end = min(t_start, t_end), max(t_start, t_end)
-                    
-#                print(t_start, t_end)
                 circle_width, circle_height = 2*radius, 2*radius
                 arc = mpatches.Arc(xy=center, width=circle_width, 
                                    height=circle_height, angle=0,
-                                   theta1=t_start, theta2=t_end, 
+                                   theta1=t_1, theta2=t_2, 
                                    color="red")
                 plt.gca().add_patch(arc)
                 
