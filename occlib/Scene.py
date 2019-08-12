@@ -40,4 +40,12 @@ class BSpline3D(object):
     
     def get_polylines(self, n):
         return scipy_bspline(cv=self.poles, n=n, degree=self.degree, periodic=self.periodic)
-        
+    
+    def get_control_points(self, XYZ, value=0.0):
+        control_points = []
+        for j in range(len(self.poles)):
+            control_point = [self.poles[j][i] for i in range(len(XYZ)) if XYZ[i]]
+            control_point = control_point + [value]
+            control_points.append(control_point)
+#        print(control_points)
+        return control_points

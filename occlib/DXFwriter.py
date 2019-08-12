@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import warnings
 import ezdxf
-from .Scene import Line3D, Arc3D
+from .Scene import Line3D, Arc3D, BSpline3D
 
 def write(objects, XYZ, path):
-    path = "test.dxf"
     dwg = ezdxf.new('AC1024')
     dwg.encoding = 'utf-8'
     msp = dwg.modelspace()
@@ -14,6 +13,7 @@ def write(objects, XYZ, path):
             start = obj.get_v1(XYZ)
             end = obj.get_v2(XYZ)
             msp.add_line(start, end)
+            
         elif type(obj) == Arc3D:
             center = obj.get_center(XYZ)
             radius = obj.radius
@@ -22,6 +22,13 @@ def write(objects, XYZ, path):
             is_counter_clockwise = True
             msp.add_arc(center, radius, start_angle, end_angle, 
                         is_counter_clockwise)
+            
+        elif type(obj) == BSpline3D:
+            if obj.periodic:
+                msp.add_closed_spline(obj.get_control_points(XYZ), obj.degree)
+            else:
+                msp.add_open_spline(obj.get_control_points(XYZ), obj.degree)
+            
         else:
             warnings.warn('Unknown object!')
                 

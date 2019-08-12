@@ -9,7 +9,6 @@ from OCC.BRepAdaptor import BRepAdaptor_Curve
 
 from .Topology import Topo
 from .Util import angle360
-#from .BSpline import scipy_bspline
 from .Scene import Line3D, Arc3D, BSpline3D
 
 def EdgeOnSurface(edge, section_plane, lim_coord1, lim_coord2, XYZ):
@@ -24,6 +23,7 @@ def EdgeOnSurface(edge, section_plane, lim_coord1, lim_coord2, XYZ):
     curve_adaptor = BRepAdaptor_Curve(edge_on_surface)
 
     if curve_adaptor.GetType() == GeomAbs_Line:
+        
         v = list(Topo(edge_on_surface).vertices())
         v1 = BRep_Tool.Pnt(v[0]).X(), BRep_Tool.Pnt(v[0]).Y(), BRep_Tool.Pnt(v[0]).Z()
         v2 = BRep_Tool.Pnt(v[-1]).X(), BRep_Tool.Pnt(v[-1]).Y(), BRep_Tool.Pnt(v[-1]).Z()
@@ -54,8 +54,18 @@ def EdgeOnSurface(edge, section_plane, lim_coord1, lim_coord2, XYZ):
         vec_start = (start[0] - center[0], start[1] - center[1])
         vec_end = (end[0] - center[0], end[1] - center[1])
         
-        t1 = angle360(vec_end)
-        t2 = angle360(vec_start)
+        t1 = angle360(vec_start)
+        t2 = angle360(vec_end)
+                
+        if not XYZ[0]:
+            axis = circle.Axis().Direction().X()
+        elif not XYZ[1]:
+            axis = circle.Axis().Direction().Y()
+        elif not XYZ[2]:
+            axis = circle.Axis().Direction().Z()
+            
+        if axis < 0:
+            t1, t2 = t2, t1            
         
         obj = Arc3D(v1, v2, t1, t2, center, radius)
                 
